@@ -15,6 +15,7 @@ public class Game1 : Game
     private Texture2D _texture;
     private Texture2D circleTexture;
     private List<PhysicsObject> _physicsObjects;
+    private KeyboardState _previousKeyboardState;
 
     public Game1()
     {
@@ -22,6 +23,15 @@ public class Game1 : Game
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
         _physicsObjects = new List<PhysicsObject>();
+    }
+
+    protected override void Initialize()
+    {
+        _graphics.PreferredBackBufferWidth = 1000; // Increase width
+        _graphics.PreferredBackBufferHeight = 600;
+        _graphics.ApplyChanges();
+
+        base.Initialize();
     }
 
     protected override void LoadContent()
@@ -41,26 +51,29 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
+        KeyboardState currentKeyboardState = Keyboard.GetState();
         MouseState mouseState = Mouse.GetState();
-        KeyboardState keyboardState = Keyboard.GetState();
 
-        // Create circle on 'C' key press
-        if (keyboardState.IsKeyDown(Keys.C))
+        // Check for new key press
+        if (currentKeyboardState.IsKeyDown(Keys.C) && !_previousKeyboardState.IsKeyDown(Keys.C))
         {
-            _physicsObjects.Add(new PhysicsObject(new Vector2(mouseState.X, mouseState.Y), 1f, 15f, Color.Green)); // Circle
+            // Add a new circle
+            _physicsObjects.Add(new PhysicsObject(new Vector2(mouseState.X, mouseState.Y), 1f, 15f, Color.Green));
+        }
+        if (currentKeyboardState.IsKeyDown(Keys.S) && !_previousKeyboardState.IsKeyDown(Keys.S))
+        {
+            // Add a new square
+            _physicsObjects.Add(new PhysicsObject(new Vector2(mouseState.X, mouseState.Y), 1f, new Vector2(40, 40), Color.Blue));
         }
 
-        // Create square on 'S' key press
-        if (keyboardState.IsKeyDown(Keys.S))
-        {
-            _physicsObjects.Add(new PhysicsObject(new Vector2(mouseState.X, mouseState.Y), 1f, new Vector2(40, 40), Color.Blue)); // Square
-        }
-
-        // Simulate each physics object
+        // Simulate physics for each object
         foreach (var obj in _physicsObjects)
         {
             Simulate(obj, gameTime);
         }
+
+        // Update previous keyboard state
+        _previousKeyboardState = currentKeyboardState;
 
         base.Update(gameTime);
     }
