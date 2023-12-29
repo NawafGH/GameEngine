@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MyPhysicsEngine.Entities
 {
@@ -18,6 +19,8 @@ namespace MyPhysicsEngine.Entities
         public float Radius { get; set; }  // Used for Circle
         public Color Color { get; set; }
         public ShapeType Shape { get; set; }
+        public bool IsDynamic { get; set; }
+        public Texture2D CircleTexture { get; set; }
 
         // Constructor for Square
         public PhysicsObject(Vector2 position, float mass, Vector2 size, Color color)

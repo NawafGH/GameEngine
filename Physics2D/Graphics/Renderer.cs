@@ -30,9 +30,9 @@ namespace MyPhysicsEngine.Graphics
             spriteBatch.Draw(texture, rect, obj.Color);
         }
 
-        public static Texture2D CreateCircleTexture(GraphicsDevice graphicsDevice, int radius, Color color)
+        public static Texture2D CreateCircleTexture(GraphicsDevice graphicsDevice, float radius, Color color)
         {
-            int diameter = radius * 2;
+            int diameter =  ((int) radius) * 2;
             Texture2D texture = new Texture2D(graphicsDevice, diameter, diameter);
             Color[] colorData = new Color[diameter * diameter];
 
